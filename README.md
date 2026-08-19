@@ -37,29 +37,33 @@ npx remotion render
 npx remotion upgrade
 ```
 
-## Animación: lluvia sobre una imagen
+## Animación: lector sobre puerta de cristal con lluvia
 
-Este proyecto tiene una sola composición (`src/Composition.tsx`,
-`RainOnImage`) que muestra una imagen con gotas de lluvia deslizándose
-encima.
+Composición (`src/Composition.tsx`, `RainOnReader`) en formato vertical
+(1080x1350) que muestra el lector biométrico en plano medio sobre una
+puerta de cristal simulada (fondo blanco, panel con reflejos y manija por
+CSS), con lluvia cayendo sobre toda la escena y gotas grandes
+deslizándose específicamente sobre el lector.
 
-1. Coloca tu imagen en `public/photo.jpg` (ese es el nombre que espera la
-   composición; puedes cambiarlo en `src/Composition.tsx` si usas otro
-   nombre o formato).
-2. Previsualiza en vivo:
+- La imagen del lector está en `public/reader.png`. Para usar otra,
+  reemplaza ese archivo (o cambia el nombre en `src/Composition.tsx`).
+- El área del lector dentro del panel (`READER_AREA`) controla dónde caen
+  las gotas grandes; el tamaño/posición del panel de cristal y del lector
+  se ajustan en los estilos del mismo archivo.
+- `NUM_BACKGROUND_DROPS` / `NUM_READER_DROPS` controlan cuánta lluvia hay
+  en cada capa.
 
-   ```console
-   npm run dev
-   ```
+Previsualiza en vivo:
 
-3. Cuando estés conforme, renderiza el video final:
+```console
+npm run dev
+```
 
-   ```console
-   npx remotion render RainOnImage out/video.mp4
-   ```
+Renderiza el video final:
 
-Puedes ajustar la cantidad de gotas (`NUM_DROPS`), su velocidad, tamaño u
-opacidad directamente en `src/Composition.tsx`.
+```console
+npx remotion render RainOnReader out/video.mp4
+```
 
 ### Instalación en Windows
 
@@ -79,8 +83,7 @@ opacidad directamente en `src/Composition.tsx`.
    npm install
    ```
 
-5. Coloca tu imagen en `public/photo.jpg` y previsualiza en el editor de
-   Remotion:
+5. Previsualiza en el editor de Remotion:
 
    ```console
    npm run dev
@@ -89,7 +92,7 @@ opacidad directamente en `src/Composition.tsx`.
 6. Renderiza el video final:
 
    ```console
-   npx remotion render RainOnImage out/video.mp4
+   npx remotion render RainOnReader out/video.mp4
    ```
 
 Remotion descargará automáticamente su propio Chrome headless la primera vez
