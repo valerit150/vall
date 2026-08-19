@@ -1,93 +1,63 @@
-import { z } from "zod";
+import React from "react";
 import {
   AbsoluteFill,
-  Composition,
+  Img,
   interpolate,
-  spring,
+  random,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
 
-export const myCompSchema = z.object({
-  title: z.string(),
-  subtitle: z.string(),
-  backgroundColor: z.string().default("#0b1120"),
-});
+const NUM_DROPS = 25;
 
-type Props = z.infer<typeof myCompSchema>;
+const drops = new Array(NUM_DROPS).fill(0).map((_, i) => ({
+  x: random(`drop-x-${i}`) * 100,
+  delay: random(`drop-delay-${i}`) * 90,
+  duration: 40 + random(`drop-duration-${i}`) * 40,
+  size: 6 + random(`drop-size-${i}`) * 10,
+}));
 
-export const MyComposition = () => {
-  return (
-    <Composition
-      id="MyComp"
-      component={MyComponent}
-      durationInFrames={150}
-      fps={30}
-      width={1280}
-      height={720}
-      schema={myCompSchema}
-      defaultProps={{
-        title: "Hola Mundo",
-        subtitle: "Video generado automáticamente con Remotion",
-        backgroundColor: "#0b1120",
-      }}
-    />
-  );
-};
-
-export const MyComponent: React.FC<Props> = ({
-  title,
-  subtitle,
-  backgroundColor,
-}) => {
+export const RainOnImage: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-
-  const titleProgress = spring({ frame, fps, config: { damping: 200 } });
-  const titleOpacity = interpolate(titleProgress, [0, 1], [0, 1]);
-  const titleScale = interpolate(titleProgress, [0, 1], [0.8, 1]);
-
-  const subtitleProgress = spring({
-    frame: frame - 15,
-    fps,
-    config: { damping: 200 },
-  });
-  const subtitleOpacity = interpolate(subtitleProgress, [0, 1], [0, 1]);
+  const { height } = useVideoConfig();
 
   return (
-    <AbsoluteFill
-      style={{
-        backgroundColor,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        fontFamily: "Arial, sans-serif",
-        padding: 80,
-      }}
-    >
-      <div
-        style={{
-          opacity: titleOpacity,
-          transform: `scale(${titleScale})`,
-          color: "white",
-          fontSize: 80,
-          fontWeight: 700,
-          textAlign: "center",
-        }}
-      >
-        {title}
-      </div>
-      <div
-        style={{
-          opacity: subtitleOpacity,
-          color: "#94a3b8",
-          fontSize: 36,
-          marginTop: 24,
-          textAlign: "center",
-        }}
-      >
-        {subtitle}
-      </div>
+    <AbsoluteFill style={{ backgroundColor: "black" }}>
+      <Img
+        src={staticFile("photo.jpg")}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      />
+      {drops.map((drop, i) => {
+        const localFrame = (frame + drop.delay) % drop.duration;
+        const progress = localFrame / drop.duration;
+        const y = interpolate(progress, [0, 1], [-40, height + 40]);
+        const opacity = interpolate(
+          progress,
+          [0, 0.1, 0.9, 1],
+          [0, 1, 1, 0],
+        );
+        const wobble = Math.sin((frame + drop.delay) / 8) * 4;
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${drop.x}%`,
+              top: y,
+              transform: `translateX(${wobble}px)`,
+              width: drop.size * 0.5,
+              height: drop.size,
+              borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.65))",
+              opacity,
+              filter: "blur(0.5px)",
+            }}
+          />
+        );
+      })}
     </AbsoluteFill>
   );
 };

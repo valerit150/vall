@@ -37,25 +37,29 @@ npx remotion render
 npx remotion upgrade
 ```
 
-## Generación automática de videos (por datos)
+## Animación: lluvia sobre una imagen
 
-Este proyecto incluye una composición dinámica (`src/Composition.tsx`) que
-acepta `title`, `subtitle` y `backgroundColor` como props, y un script que
-renderiza un video por cada entrada de `data/videos.json`, sin necesidad de
-editar nada a mano en cada ejecución.
+Este proyecto tiene una sola composición (`src/Composition.tsx`,
+`RainOnImage`) que muestra una imagen con gotas de lluvia deslizándose
+encima.
 
-1. Edita `data/videos.json` y añade tantas entradas como videos quieras
-   generar (cada una con su `id` y sus `props`).
-2. Ejecuta:
+1. Coloca tu imagen en `public/photo.jpg` (ese es el nombre que espera la
+   composición; puedes cambiarlo en `src/Composition.tsx` si usas otro
+   nombre o formato).
+2. Previsualiza en vivo:
 
    ```console
-   npm run render:batch
+   npm run dev
    ```
 
-3. Los videos se generan en `out/` (uno por entrada, `out/<id>.mp4`).
+3. Cuando estés conforme, renderiza el video final:
 
-Puedes seguir editando el diseño/animación en `src/Composition.tsx` y
-previsualizarlo en vivo con `npm run dev`.
+   ```console
+   npx remotion render RainOnImage out/video.mp4
+   ```
+
+Puedes ajustar la cantidad de gotas (`NUM_DROPS`), su velocidad, tamaño u
+opacidad directamente en `src/Composition.tsx`.
 
 ### Instalación en Windows
 
@@ -75,28 +79,21 @@ previsualizarlo en vivo con `npm run dev`.
    npm install
    ```
 
-5. Previsualiza en el editor de Remotion:
+5. Coloca tu imagen en `public/photo.jpg` y previsualiza en el editor de
+   Remotion:
 
    ```console
    npm run dev
    ```
 
-6. Genera los videos automáticamente a partir de `data/videos.json`:
+6. Renderiza el video final:
 
    ```console
-   npm run render:batch
+   npx remotion render RainOnImage out/video.mp4
    ```
 
 Remotion descargará automáticamente su propio Chrome headless la primera vez
-que renderices (no requiere tener Chrome instalado aparte). Si tu red
-corporativa bloquea esa descarga, puedes apuntar a un Chrome/Chromium ya
-instalado con la variable de entorno `REMOTION_BROWSER_EXECUTABLE`, por
-ejemplo:
-
-```console
-set REMOTION_BROWSER_EXECUTABLE=C:\Program Files\Google\Chrome\Application\chrome.exe
-npm run render:batch
-```
+que renderices (no requiere tener Chrome instalado aparte).
 
 ## Docs
 

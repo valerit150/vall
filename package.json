@@ -6,9 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@remotion/bundler": "4.0.513",
     "@remotion/cli": "4.0.513",
-    "@remotion/renderer": "4.0.513",
     "@remotion/tailwind-v4": "4.0.513",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -29,8 +27,7 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "render": "remotion render",
-    "render:batch": "node scripts/render-batch.mjs"
+    "render": "remotion render"
   },
   "sideEffects": [
     "*.css"
